@@ -1591,7 +1591,7 @@ static void renderScene(std::vector<std::string>* screenText = NULL) {
         if (screenText != NULL)
             for (int i = 0; i < (int)scene->screenText.size(); ++i)
                 screenText->push_back(scene->screenText[i].getString());
-	screenText.push_back(std::string("CrowdAI : Learning How to Walk Challenge Submission"));
+	scene->screenText.push_back(std::string("CrowdAI : Learning How to Walk Challenge Submission"));
         scene->sceneHasBeenDrawn = true;
     }
 
