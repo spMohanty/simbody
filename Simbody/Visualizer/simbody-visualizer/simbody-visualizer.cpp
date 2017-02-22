@@ -1675,7 +1675,7 @@ static void redrawDisplay() {
             glutBitmapCharacter(font, *p);
         nextLine += lineHeight;
     }
-
+    showFrameNum = true;
     // Frame number
     if (showFrameNum) {
         char cnttxt[64]; sprintf(cnttxt, "Frame: %d", frameCounter);
