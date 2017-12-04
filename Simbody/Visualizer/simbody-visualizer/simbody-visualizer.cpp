@@ -887,11 +887,15 @@ static void alignCameraWithScreenCenter(bool sceneAlreadyLocked=false){
 	computeSceneMeshBounds(scene, radius, center);
 		if (!sceneAlreadyLocked)
 	pthread_mutex_unlock(&sceneLock);       //----- UNLOCK SCENE --------
-	
-	float center_x = center[0];
+
+  float center_x = center[0];
 	fVec3 newCameraPos = X_GC.p();
-	
-	newCameraPos[0] = center_x;
+  float x_min = 0;
+  float x_max_distance = 2;
+  float z = 2;
+
+  newCameraPos[0] = max(x_min, center_x-x_max_distance);
+  newCameraPos[2] = z;
 	X_GC.updP() = newCameraPos;
 
 }
