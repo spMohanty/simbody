@@ -128,6 +128,7 @@ using namespace std;
 // default transform for the camera until we know what the SimTK::System
 // we're viewing considers to be its "up" and "look at" directions.
 static fTransform X_GC;
+static fTransform SKELETON_GC;
 static int inPipe, outPipe;
 
 string movieName;
@@ -889,15 +890,20 @@ static void alignCameraWithScreenCenter(bool sceneAlreadyLocked=false){
 	pthread_mutex_unlock(&sceneLock);       //----- UNLOCK SCENE --------
 
   float center_x = center[0];
+
 	fVec3 newCameraPos = X_GC.p();
-  float x_min = 0;
-  float x_max_distance = 2;
-  float z = 2;
+
+  float x_min = -1;
+  float x_max_distance = 4;
+  // float y = 2;
+  float z = 0.5;
 
   newCameraPos[0] = max(x_min, center_x-x_max_distance);
+  // newCameraPos[1] = y;
   newCameraPos[2] = z;
-	X_GC.updP() = newCameraPos;
 
+	X_GC.updP() = newCameraPos;
+  SKELETON_GC.updP() =  center;
 }
 class PendingCameraAlign : public PendingCommand {
 public:
@@ -1407,6 +1413,7 @@ static void drawGroundAndSky(float farClipDistance) {
 
     center = X_GC.p()-X_GC.R()*fVec3(0, 0, 0.9999f*farClipDistance);
     center[1] = 0;
+    center[2] += 10;
     corner1 = center+fVec3(-farClipDistance, 0, -farClipDistance);
     corner2 = center+fVec3(farClipDistance, 0, -farClipDistance);
     corner3 = center+fVec3(farClipDistance, 0, farClipDistance);
@@ -1550,9 +1557,9 @@ static void renderScene(std::vector<std::string>* screenText = NULL) {
         gluPerspective(fieldOfView*SimTK_RADIAN_TO_DEGREE, (GLdouble) viewWidth/viewHeight, nearClipDistance, farClipDistance);
         glMatrixMode(GL_MODELVIEW);
         fVec3 cameraPos = X_GC.p();
-        fVec3 centerPos = X_GC.p()+X_GC.R()*fVec3(0, 0, -1);
+        fVec3 skeletonPos = SKELETON_GC.p();
         fVec3 upDir = X_GC.R()*fVec3(0, 1, 0);
-        gluLookAt(cameraPos[0], cameraPos[1], cameraPos[2], centerPos[0], centerPos[1], centerPos[2], upDir[0], upDir[1], upDir[2]);
+        gluLookAt(cameraPos[0], cameraPos[1], cameraPos[2], skeletonPos[0], skeletonPos[1], skeletonPos[2], upDir[0], upDir[1], upDir[2]);
 
         // Render the objects in the scene.
 
