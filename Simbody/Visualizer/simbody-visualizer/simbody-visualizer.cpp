@@ -2816,7 +2816,7 @@ int main(int argc, char** argv) {
         printf("The simbody-visualizer is intended to be invoked programmatically.\n");
     }
     stringstream myStreamString;
-    myStreamString << std::getenv("CROWDAI_SUBMISSION_ID");
+    myStreamString << std::getenv("AICROWD_MOVIE_FOLDER_NAME");
     movieName = myStreamString.str();
     cout << "Movie Name " << movieName << endl;
 
